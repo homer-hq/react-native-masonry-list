@@ -34,6 +34,10 @@ The number of columns.
 
 Same as `renderItem` from `FlatList` but also gets passed the column index.
 
+#### `ListFooterComponent: () => ?ReactElement<*>,`
+
+Rendered at the very end of the list. Can be a React Component Class, a render function, or a rendered element.
+
 ## Example
 
 Play with on [Expo](https://exp.host/@appandflow/masonry-list-example)
@@ -45,8 +49,6 @@ Take a look at [example folder](https://github.com/AppAndFlow/react-native-mason
 - Support measuring items automatically and get rid of `getHeightForItem`.
 
 - Implement onEndReached in a way that it isn't called multiple times.
-
-- Support FooterComponent.
 
 - Long term, could probably be implemented without using multiple `VirtualizedList`
 to make it more performant and less hacky.
