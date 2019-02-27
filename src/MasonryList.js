@@ -100,10 +100,11 @@ export default class MasonryList extends React.Component<Props, State> {
     scrollEventThrottle: 50,
     numColumns: 1,
     renderScrollComponent: (props: Props) => {
+      const { contentContainerStyle, ...restProps } = props;
       if (props.onRefresh && props.refreshing != null) {
         return (
           <ScrollView
-            {...props}
+            {...restProps}
             refreshControl={
               <RefreshControl
                 refreshing={props.refreshing}
@@ -113,7 +114,7 @@ export default class MasonryList extends React.Component<Props, State> {
           />
         );
       }
-      return <ScrollView {...props} />;
+      return <ScrollView {...restProps} />;
     },
   };
 
@@ -223,6 +224,7 @@ export default class MasonryList extends React.Component<Props, State> {
       ListFooterComponent,
       keyExtractor,
       onEndReached,
+      contentContainerStyle,
       ...props
     } = this.props;
     let headerElement;
@@ -240,7 +242,7 @@ export default class MasonryList extends React.Component<Props, State> {
     }
 
     const content = (
-      <View style={styles.contentContainer}>
+      <View style={[styles.contentContainer, contentContainerStyle]}>
         {this.state.columns.map(col =>
           <VirtualizedList
             {...props}
