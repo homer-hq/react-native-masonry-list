@@ -240,27 +240,34 @@ export default class MasonryList extends React.Component<Props, State> {
     if (ListFooterComponent) {
       footerElement = <ListFooterComponent />
     }
+      
+    const getZIndex = (index) => {
+      const zIndex = index === this.props.selectedColumn ? 2000 : 1000;
+      return { zIndex };
+    }
 
     const content = (
       <View style={[styles.contentContainer, contentContainerStyle]}>
         {this.state.columns.map(col =>
-          <VirtualizedList
-            {...props}
-            ref={ref => (this._listRefs[col.index] = ref)}
-            key={`$col_${col.index}`}
-            data={col.data}
-            getItemCount={this._getItemCount}
-            getItem={this._getItem}
-            getItemLayout={(data, index) =>
-              this._getItemLayout(col.index, index)}
-            renderItem={({ item, index }) =>
-              renderItem({ item, index, column: col.index })}
-            renderScrollComponent={this._renderScrollComponent}
-            keyExtractor={keyExtractor}
-            onEndReached={onEndReached}
-            onEndReachedThreshold={this.props.onEndReachedThreshold}
-            removeClippedSubviews={false}
-          />,
+          <View style={getZIndex(col.index)}>
+            <VirtualizedList
+              {...props}
+              ref={ref => (this._listRefs[col.index] = ref)}
+              key={`$col_${col.index}`}
+              data={col.data}
+              getItemCount={this._getItemCount}
+              getItem={this._getItem}
+              getItemLayout={(data, index) =>
+                this._getItemLayout(col.index, index)}
+              renderItem={({ item, index }) =>
+                renderItem({ item, index, column: col.index })}
+              renderScrollComponent={this._renderScrollComponent}
+              keyExtractor={keyExtractor}
+              onEndReached={onEndReached}
+              onEndReachedThreshold={this.props.onEndReachedThreshold}
+              removeClippedSubviews={false}
+            />
+          </View>,
         )}
       </View>
     );
