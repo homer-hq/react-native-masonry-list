@@ -241,9 +241,15 @@ export default class MasonryList extends React.Component<Props, State> {
       footerElement = <ListFooterComponent />
     }
 
+    const getZIndex = (index) => {
+      const zIndex = index === this.props.selectedColumn ? 5000 : 1000;
+      return { zIndex };
+    }
+
     const content = (
       <View style={[styles.contentContainer, contentContainerStyle]}>
         {this.state.columns.map(col =>
+        <View style={[props.style, getZIndex(col.index)]}>
           <VirtualizedList
             {...props}
             ref={ref => (this._listRefs[col.index] = ref)}
@@ -260,7 +266,8 @@ export default class MasonryList extends React.Component<Props, State> {
             onEndReached={onEndReached}
             onEndReachedThreshold={this.props.onEndReachedThreshold}
             removeClippedSubviews={false}
-          />,
+          />
+        </View>,
         )}
       </View>
     );
