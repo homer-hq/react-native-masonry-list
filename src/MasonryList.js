@@ -17,7 +17,7 @@ type Column = {
   heights: Array<number>,
 };
 
-const _stateFromProps = ({ numColumns, data, getHeightForItem }) => {
+const _stateFromProps = ({ numColumns, data, getHeightForItem, getColumnOfSelectedItem }) => {
   const columns: Array<Column> = Array.from({
     length: numColumns,
   }).map((col, i) => ({
@@ -36,6 +36,9 @@ const _stateFromProps = ({ numColumns, data, getHeightForItem }) => {
     column.data.push(item);
     column.heights.push(height);
     column.totalHeight += height;
+    if (getColumnOfSelectedItem) {
+      getColumnOfSelectedItem(item, column.index);
+    }
   });
 
   return { columns };
@@ -216,6 +219,11 @@ export default class MasonryList extends React.Component<Props, State> {
 
   _captureScrollRef = ref => (this._scrollRef = ref);
 
+  _getZIndex = (index) => {
+    const zIndex = index === this.props.selectedColumn ? 5000 : 1000;
+    return { zIndex };
+  }
+
   render() {
     const {
       renderItem,
@@ -241,15 +249,10 @@ export default class MasonryList extends React.Component<Props, State> {
       footerElement = <ListFooterComponent />
     }
 
-    const getZIndex = (index) => {
-      const zIndex = index === this.props.selectedColumn ? 5000 : 1000;
-      return { zIndex };
-    }
-
     const content = (
       <View style={[styles.contentContainer, contentContainerStyle]}>
         {this.state.columns.map(col =>
-        <View style={[props.style, getZIndex(col.index)]}>
+        <View style={[props.style, this._getZIndex(col.index)]} key={`$col_${col.index}`}>
           <VirtualizedList
             {...props}
             ref={ref => (this._listRefs[col.index] = ref)}
